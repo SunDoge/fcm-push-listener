@@ -1,5 +1,7 @@
 pub use fcm_push_listener::Error;
-use fcm_push_listener::{new_heartbeat_ack, MessageStream, Registration, Session as GcmSession, WebPushKeys};
+use fcm_push_listener::{
+    new_heartbeat_ack, MessageStream, Registration, Session as GcmSession, WebPushKeys,
+};
 use tokio::io::AsyncWriteExt;
 
 async fn run(registration: Registration) -> Result<(), fcm_push_listener::Error> {
@@ -21,6 +23,9 @@ async fn run(registration: Registration) -> Result<(), fcm_push_listener::Error>
                 if let Err(e) = result {
                     println!("Error sending heartbeat ack: {:?}", e);
                 }
+            }
+            fcm_push_listener::Message::HeartbeatAck => {
+                println!("Heartbeat Ack");
             }
             fcm_push_listener::Message::Other(tag, bytes) => {
                 println!("Got non-data message: {tag:?}, {bytes:?}");
